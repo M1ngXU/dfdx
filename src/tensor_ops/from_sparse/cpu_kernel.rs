@@ -38,12 +38,15 @@ where
         }
         let inp_ghost = values.ghost();
         let out_ghost = data.ghost();
+
+        let input_shape = values.shape;
+        let input_strides = values.strides;
         tape.add_backward_op(move |grads: &mut Gradients<E, Cpu>| {
             grads.try_alloc_for(&inp_ghost)?;
             grads.try_alloc_for(&out_ghost)?;
             let (grad_inp, grad_out) = grads.mut_and_ref(&inp_ghost, &out_ghost);
             for (i, index) in indeces.into_iter().enumerate() {
-                grad_inp.data[i] =
+                grad_inp.data[index_to_i(&input_shape, &input_strides, [i])] +=
                     grad_out.data[index_to_i(&output_shape, &output_shape.strides(), index)];
             }
             Ok(())
