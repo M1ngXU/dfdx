@@ -6,5 +6,9 @@ mod cpu_kernel;
 
 // TODO TryFromSparse
 pub trait FromSparse<E: Dtype, D: Device<E>, T: Tape<E, D>, InputShape: Shape, OutputShape: Shape> {
-    fn from_sparse(&self, sparse: Tensor<InputShape, E, D, T>) -> Tensor<OutputShape, E, D, T>;
+    fn from_sparse(
+        &self,
+        sparse: Tensor<InputShape, E, D, T>,
+        output_shape: OutputShape,
+    ) -> Tensor<OutputShape, E, D, T>;
 }

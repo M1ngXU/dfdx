@@ -4,7 +4,7 @@ use crate::{
 };
 use std::sync::Arc;
 
-pub(crate) fn index_to_i<S: Shape>(shape: &S, strides: &S::Concrete, index: S::Concrete) -> usize {
+pub fn index_to_i<S: Shape>(shape: &S, strides: &S::Concrete, index: S::Concrete) -> usize {
     let sizes = shape.concrete();
     for (i, idx) in index.into_iter().enumerate() {
         if idx >= sizes[i] {

@@ -44,7 +44,7 @@ impl<E, D: Storage<E>> Gradients<E, D> {
 
 impl<E, D: Storage<E>> Gradients<E, D> {
     /// Retrieves mutable gradient for `t`, allocating one if it isn't present.
-    pub(crate) fn get_or_alloc_mut<S: Shape>(
+    pub fn get_or_alloc_mut<S: Shape>(
         &mut self,
         t: &Tensor<S, E, D>,
     ) -> Result<&mut D::Vec, D::Err> {
@@ -54,7 +54,7 @@ impl<E, D: Storage<E>> Gradients<E, D> {
     }
 
     /// Inserts a gradient for `t`
-    pub(crate) fn try_alloc_for<S: Shape>(
+    pub fn try_alloc_for<S: Shape>(
         &mut self,
         t: &impl Tensorlike<S, E, D>,
     ) -> Result<(), D::Err> {
@@ -88,14 +88,14 @@ impl<E, D: Storage<E>> Gradients<E, D> {
     /// Returns a mutable reference to the data associated with `t`.
     ///
     /// **Panics** if data associated with `t` is not found. This indicates an unrecoverable bug.
-    pub(crate) fn get_mut<S: Shape>(&mut self, t: &impl Tensorlike<S, E, D>) -> &mut D::Vec {
+    pub fn get_mut<S: Shape>(&mut self, t: &impl Tensorlike<S, E, D>) -> &mut D::Vec {
         self.gradient_by_id.get_mut(&t.id()).unwrap()
     }
 
     /// Returns a mutable reference to the data associated with `t`.
     ///
     /// **Panics** if data associated with `t` is not found. This indicates an unrecoverable bug.
-    pub(crate) fn get_ref<S: Shape>(&mut self, t: &impl Tensorlike<S, E, D>) -> &D::Vec {
+    pub fn get_ref<S: Shape>(&mut self, t: &impl Tensorlike<S, E, D>) -> &D::Vec {
         self.gradient_by_id.get(&t.id()).unwrap()
     }
 
@@ -120,7 +120,7 @@ impl<E, D: Storage<E>> Gradients<E, D> {
     /// `l` is the gradient to update, and `r` is the gradient to backprop.
     ///
     /// **Panics** if `l` and `r` have the same id.
-    pub(crate) fn mut_and_ref<L: Shape, R: Shape>(
+    pub fn mut_and_ref<L: Shape, R: Shape>(
         &mut self,
         l: &impl Tensorlike<L, E, D>,
         r: &impl Tensorlike<R, E, D>,

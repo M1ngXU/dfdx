@@ -137,7 +137,7 @@
 //! empty out any existing allocations and prevent any new ones from being cached.
 
 pub(crate) mod cache;
-pub(crate) mod cpu;
+pub mod cpu;
 #[cfg(feature = "cuda")]
 pub(crate) mod cuda;
 mod ghost;
@@ -155,7 +155,7 @@ mod tensor_impls;
 
 pub(crate) use ghost::GhostTensor;
 pub(crate) use storage_traits::{OneFillStorage, ZeroFillStorage};
-pub(crate) use tensorlike::Tensorlike;
+pub use tensorlike::Tensorlike;
 
 pub use cpu::{Cpu, CpuError};
 #[cfg(not(feature = "cuda"))]
