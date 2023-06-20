@@ -35,8 +35,6 @@ pub trait Device<E: Dtype>:
     + crate::tensor::ZerosTensor<usize>
     + crate::tensor::OnesTensor<usize>
     + crate::tensor::SampleTensor<usize>
-    + crate::tensor::OneFillStorage<usize>
-    + crate::tensor::ZeroFillStorage<usize>
 
     // broadcast & reduces
     + super::super::sum_to::SumKernel<E>
