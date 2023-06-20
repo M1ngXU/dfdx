@@ -17,6 +17,9 @@ pub trait Device<E: Dtype>:
     + super::super::stack::StackKernel<E>
     + super::super::concat::ConcatKernel<E>
     + super::super::concat_along::ConcatAlongKernel<E>
+    + super::super::stack::StackKernel<usize>
+    + super::super::concat::ConcatKernel<usize>
+    + super::super::concat_along::ConcatAlongKernel<usize>
 
     // optimizers
     + crate::optim::AdamKernel<E>
@@ -29,6 +32,11 @@ pub trait Device<E: Dtype>:
     + crate::tensor::SampleTensor<E>
     + crate::tensor::OneFillStorage<E>
     + crate::tensor::ZeroFillStorage<E>
+    + crate::tensor::ZerosTensor<usize>
+    + crate::tensor::OnesTensor<usize>
+    + crate::tensor::SampleTensor<usize>
+    + crate::tensor::OneFillStorage<usize>
+    + crate::tensor::ZeroFillStorage<usize>
 
     // broadcast & reduces
     + super::super::sum_to::SumKernel<E>

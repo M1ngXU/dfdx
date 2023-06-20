@@ -58,7 +58,6 @@ pub struct MultiHeadAttention<
     D: Storage<E>,
 > {
     pub w_q: Linear<EMBED_DIM, K_DIM, E, D>,
-    pub w_k: Linear<EMBED_DIM, K_DIM, E, D>,
     pub w_v: Linear<EMBED_DIM, V_DIM, E, D>,
     pub w_o: Linear<V_DIM, EMBED_DIM, E, D>,
 }
@@ -76,11 +75,10 @@ where
         visitor.visit_fields(
             (
                 Self::module("w_q", |s| &s.w_q, |s| &mut s.w_q),
-                Self::module("w_k", |s| &s.w_k, |s| &mut s.w_k),
                 Self::module("w_v", |s| &s.w_v, |s| &mut s.w_v),
                 Self::module("w_o", |s| &s.w_o, |s| &mut s.w_o),
             ),
-            |(w_q, w_k, w_v, w_o)| MultiHeadAttention { w_q, w_k, w_v, w_o },
+            |(w_q, w_v, w_o)| MultiHeadAttention { w_q, w_v, w_o },
         )
     }
 }
@@ -159,7 +157,7 @@ where
         let v = v.try_reshape_like(&(b, s2, H, V / H))?;
         let v = v.try_permute::<_, Axes4<0, 2, 1, 3>>()?;
 
-        let k = self.w_k.try_forward(k.retaped::<T>())?;
+        let k = self.w_q.try_forward(k.retaped::<T>())?;
         let k = k.try_reshape_like(&(b, s2, H, K / H))?;
         let k = k.try_permute::<_, Axes4<0, 2, 3, 1>>()?;
 
