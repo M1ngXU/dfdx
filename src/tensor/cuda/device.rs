@@ -21,7 +21,7 @@ use std::{
 #[derive(Clone, Debug)]
 pub struct Cuda {
     pub(crate) cpu: Cpu,
-    pub(crate) dev: Arc<CudaDevice>,
+    pub dev: Arc<CudaDevice>,
     pub(crate) blas: Arc<CudaBlas>,
     #[cfg(feature = "cudnn")]
     #[allow(unused)]

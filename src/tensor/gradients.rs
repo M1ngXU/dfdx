@@ -54,10 +54,7 @@ impl<E, D: Storage<E>> Gradients<E, D> {
     }
 
     /// Inserts a gradient for `t`
-    pub fn try_alloc_for<S: Shape>(
-        &mut self,
-        t: &impl Tensorlike<S, E, D>,
-    ) -> Result<(), D::Err> {
+    pub fn try_alloc_for<S: Shape>(&mut self, t: &impl Tensorlike<S, E, D>) -> Result<(), D::Err> {
         if let std::collections::btree_map::Entry::Vacant(e) = self.gradient_by_id.entry(t.id()) {
             e.insert(t.try_alloc_grad()?);
         }
@@ -182,7 +179,7 @@ pub struct OwnedTape<E, D: Storage<E>> {
     /// A list of (Time, BackwardOp) pairs. The Time is used to ensure operations
     /// from merged tapes are executed in the correct order.
     pub(crate) operations: Vec<(UniqueId, BackwardOp<E, D, D::Err>)>,
-    pub(crate) gradients: Gradients<E, D>,
+    pub gradients: Gradients<E, D>,
 }
 
 impl<E, D: Storage<E>> Default for OwnedTape<E, D> {
@@ -207,7 +204,7 @@ impl<E, D: Storage<E>> OwnedTape<E, D> {
     /// Compute the [Gradients]! This just runs all the operations on a new [Gradients] struct.
     ///
     /// Note that this method takes ownership of self, so it can't be called twice!
-    pub(crate) fn execute(mut self) -> Result<Gradients<E, D>, D::Err> {
+    pub fn execute(mut self) -> Result<Gradients<E, D>, D::Err> {
         // We must ensure that the operations are sorted in execution time order.
         // Otherwise an backward operation may not be executed in the right order
         // if multiple tapes were merged together.
