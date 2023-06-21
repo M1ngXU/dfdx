@@ -118,18 +118,7 @@ mod cuda {
             let start = std::time::Instant::now();
 
             // Grab compute code from nvidia-smi
-            let mut compute_cap = {
-                let out = std::process::Command::new("nvidia-smi")
-                    .arg("--query-gpu=compute_cap")
-                    .arg("--format=csv")
-                    .output()
-                    .expect("`nvidia-smi` failed. Ensure that you have CUDA installed and that `nvidia-smi` is in your PATH.");
-                let out = std::str::from_utf8(&out.stdout).unwrap();
-                let mut lines = out.lines();
-                assert_eq!(lines.next().unwrap(), "compute_cap");
-                let cap = lines.next().unwrap().replace('.', "");
-                cap.parse::<usize>().unwrap()
-            };
+            let mut compute_cap;
 
             // Grab available GPU codes from nvcc and select the highest one
             let max_nvcc_code = {
@@ -150,6 +139,7 @@ mod cuda {
                     }
                 }
                 codes.sort();
+                compute_cap = *codes.last().unwrap();
                 if !codes.contains(&compute_cap) {
                     panic!("nvcc cannot target gpu arch {compute_cap}. Available nvcc targets are {codes:?}.");
                 }

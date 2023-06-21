@@ -31,7 +31,7 @@ use std::sync::Arc;
 #[derive(Debug, Clone)]
 pub struct Tensor<S: Shape, E, D: Storage<E>, T = NoneTape> {
     pub(crate) id: UniqueId,
-    pub(crate) data: Arc<D::Vec>,
+    pub data: Arc<D::Vec>,
     pub(crate) shape: S,
     pub(crate) strides: S::Concrete,
     pub(crate) device: D,
