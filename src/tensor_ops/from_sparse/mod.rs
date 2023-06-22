@@ -46,10 +46,9 @@ mod tests {
 
 		#[cfg(feature = "cuda")]
 		{
-			use cudarc::CudaSlice;
 			dev.dev
 				.htod_copy_into(
-					(0..25).map(|g| g as f32).collect_vec(),
+					(0..25).map(|g| g as f32).collect::<Vec<_>>(),
 					&mut **tape.gradients.get_or_alloc_mut(&output).unwrap(),
 				)
 				.unwrap();
